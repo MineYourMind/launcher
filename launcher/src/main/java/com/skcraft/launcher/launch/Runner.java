@@ -146,6 +146,13 @@ public class Runner implements Callable<Process>, ProgressObservable {
 
         ProcessBuilder processBuilder = new ProcessBuilder(builder.buildCommand());
         processBuilder.directory(instance.getContentDir());
+        
+        // remove _JAVA_OPTIONS env variable if necessairy
+        if(processBuilder.environment().containsKey("_JAVA_OPTIONS")) {
+            String javaOptionsContent = processBuilder.environment().remove("_JAVA_OPTIONS");
+            Runner.log.warning("Supressing _JAVA_OPTIONS environment variable. It's content was: " + javaOptionsContent);
+        }
+        
         Runner.log.info("Launching: " + builder);
         checkInterrupted();
 
