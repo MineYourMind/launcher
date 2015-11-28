@@ -184,10 +184,11 @@ public class LauncherFrame extends JFrame {
             @Override
             protected void showPopup(MouseEvent e) {
                 int index = instancesTable.rowAtPoint(e.getPoint());
+                int realIndex = instancesTable.convertRowIndexToModel(index);
                 Instance selected = null;
-                if (index >= 0) {
+                if (realIndex >= 0) {
                     instancesTable.setRowSelectionInterval(index, index);
-                    selected = launcher.getInstances().get(index);
+                    selected = launcher.getInstances().get(realIndex);
                 }
                 popupInstanceMenu(e.getComponent(), e.getX(), e.getY(), selected);
             }
