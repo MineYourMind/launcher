@@ -255,7 +255,7 @@ public class LauncherFrame extends JFrame {
             }
         }
 
-        if (!customJvmPath && Environment.getRuntimeJavaVersionMajor() < 1.7) {
+        if (!customJvmPath && Environment.getRuntimeJavaVersionMajor() <= 1.7) {
             // Custom button text
             Object[] options = {"Yes, please", "No, thanks"};
 
