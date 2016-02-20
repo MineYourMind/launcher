@@ -21,6 +21,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import net.miginfocom.swing.MigLayout;
+import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.SystemUtils;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -255,7 +257,7 @@ public class LauncherFrame extends JFrame {
             }
         }
 
-        if (!customJvmPath && Environment.getRuntimeJavaVersionMajor() <= 1.7) {
+        if (!customJvmPath && !SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_8)) {
             // Custom button text
             Object[] options = {"Yes, please", "No, thanks"};
 
