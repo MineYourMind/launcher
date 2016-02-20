@@ -264,7 +264,7 @@ public class LauncherFrame extends JFrame {
             int n = JOptionPane
                     .showOptionDialog(
                             this,
-                            "We detected that you are running an old version of Java which is no longer supported by all mod-packs.\nWe highly recommend to install Java 1.7 or 1.8.",
+                            "We detected that you are running an old version of Java which is no longer supported by all mod-packs.\nWe highly recommend to install Java 1.8.",
                             "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, // no custom Icon
                             options, // the titles of buttons
                             options[0]); // default button title);
