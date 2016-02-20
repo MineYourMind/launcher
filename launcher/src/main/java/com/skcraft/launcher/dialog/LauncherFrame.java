@@ -21,6 +21,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import net.miginfocom.swing.MigLayout;
+import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.SystemUtils;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -255,14 +257,14 @@ public class LauncherFrame extends JFrame {
             }
         }
 
-        if (!customJvmPath && Environment.getRuntimeJavaVersionMajor() < 1.7) {
+        if (!customJvmPath && !SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_8)) {
             // Custom button text
             Object[] options = {"Yes, please", "No, thanks"};
 
             int n = JOptionPane
                     .showOptionDialog(
                             this,
-                            "We detected that you are running an old version of Java which is no longer supported by all mod-packs.\nWe highly recommend to install Java 1.7 or 1.8.",
+                            "We detected that you are running an old version of Java which is no longer supported by all mod-packs.\nWe highly recommend to install Java 1.8.",
                             "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, // no custom Icon
                             options, // the titles of buttons
                             options[0]); // default button title);
