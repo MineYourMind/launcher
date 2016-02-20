@@ -42,13 +42,6 @@ public class Environment {
         return realArch;
     }
 
-    public static double getRuntimeJavaVersionMajor() {
-        String version = Runtime.class.getPackage().getImplementationVersion();
-        int pos = version.indexOf('.');
-        pos = version.indexOf('.', pos+1);
-        return Double.parseDouble (version.substring (0, pos));
-    }
-
     /**
      * Detect the current platform.
      *
