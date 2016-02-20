@@ -35,7 +35,6 @@ import static com.skcraft.launcher.util.SharedLocale.tr;
 
 @Log
 public class LaunchSupervisor {
-
     private final Launcher launcher;
 
     public LaunchSupervisor(Launcher launcher) {
@@ -44,47 +43,20 @@ public class LaunchSupervisor {
 
     public void launch(final Window window, final Instance instance, boolean permitUpdate, final LaunchListener listener) {
         try {
-            boolean update = permitUpdate && instance.isUpdatePending();
-
             // Store last access date
             Date now = new Date();
             instance.setLastAccessed(now);
             Persistence.commitAndForget(instance);
 
             // Perform login
-            final Session session = LoginDialog.showLoginRequest(window, launcher);
-            if (session == null) {
-                return;
+            Session session = LoginDialog.showLoginRequest(window, launcher);
+            if(session == null) {
+            	return;
             }
 
-            // If we have to update, we have to update
-            if (!instance.isInstalled()) {
-                update = true;
-            }
-
-            if (update) {
+            if ((permitUpdate && instance.isUpdatePending()) || !instance.isInstalled()) {
                 // Execute the updater
-                Updater updater = new Updater(launcher, instance);
-                updater.setOnline(session.isOnline());
-                ObservableFuture<Instance> future = new ObservableFuture<Instance>(
-                        launcher.getExecutor().submit(updater), updater);
-
-                // Show progress
-                ProgressDialog.showProgress(window, future, SharedLocale.tr("launcher.updatingTitle"), tr("launcher.updatingStatus", instance.getTitle()));
-                SwingHelper.addErrorDialogCallback(window, future);
-
-                // Update the list of instances after updating
-                future.addListener(new Runnable() {
-                    @Override
-                    public void run() {
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                listener.instancesUpdated();
-                            }
-                        });
-                    }
-                }, SwingExecutor.INSTANCE);
+            	ObservableFuture<Instance> future = update(window, instance, listener);
 
                 // On success, launch also
                 Futures.addCallback(future, new FutureCallback<Instance>() {
@@ -103,6 +75,35 @@ public class LaunchSupervisor {
         } catch (ArrayIndexOutOfBoundsException e) {
             SwingHelper.showErrorDialog(window, SharedLocale.tr("launcher.noInstanceError"), SharedLocale.tr("launcher.noInstanceTitle"));
         }
+    }
+    	
+
+    public ObservableFuture<Instance> update(final Window window, final Instance instance, final LaunchListener listener) {
+    	Session session = LoginDialog.showLoginRequest(window, launcher);
+        if (session == null) {
+            return null;
+        }
+        Updater updater = new Updater(launcher, instance);
+        updater.setOnline(session.isOnline());
+        ObservableFuture<Instance> future = new ObservableFuture<Instance>(launcher.getExecutor().submit(updater), updater);
+
+        // Show progress
+        ProgressDialog.showProgress(window, future, SharedLocale.tr("launcher.updatingTitle"), tr("launcher.updatingStatus", instance.getTitle()));
+        SwingHelper.addErrorDialogCallback(window, future);
+
+        // Update the list of instances after updating
+        future.addListener(new Runnable() {
+            @Override
+            public void run() {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.instancesUpdated();
+                    }
+                });
+            }
+        }, SwingExecutor.INSTANCE);
+        return future;
     }
 
     private void launch(Window window, Instance instance, Session session, final LaunchListener listener) {
