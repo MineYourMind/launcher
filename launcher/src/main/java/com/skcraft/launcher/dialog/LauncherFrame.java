@@ -262,7 +262,7 @@ public class LauncherFrame extends JFrame {
             int n = JOptionPane
                     .showOptionDialog(
                             this,
-                            "We detected that you are running an old version of Java which is no longer supported by all mod-packs.\nWe highly recommend to install Java 1.7 or 1.8.",
+                            "We detected that you are running an old version of Java which is no longer supported by all mod-packs.\nWe highly recommend to install Java 1.8.",
                             "WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, // no custom Icon
                             options, // the titles of buttons
                             options[0]); // default button title);
@@ -423,18 +423,14 @@ public class LauncherFrame extends JFrame {
 
                 forceUpdateIcon = new ImageIcon(SwingHelper.readIconImage(Launcher.class, "forceUpdateIcon.png"));
 
-                if (!selected.isUpdatePending()) {
-                    menuItem = new JMenuItem(SharedLocale.tr("instance.forceUpdate"), forceUpdateIcon);
-                    menuItem.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            selected.setUpdatePending(true);
-                            launch();
-                            instancesModel.update();
-                        }
-                    });
-                    popup.add(menuItem);
-                }
+                menuItem = new JMenuItem(selected.isUpdatePending() ? SharedLocale.tr("instance.update") : SharedLocale.tr("instance.forceUpdate"), forceUpdateIcon);
+                menuItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                    	doUpdate(selected);
+                    }
+                });
+                popup.add(menuItem);
 
                 hardForceUpdateIcon = new ImageIcon(SwingHelper.readIconImage(Launcher.class, "hardForceUpdateIcon.png"));
 
@@ -559,6 +555,13 @@ public class LauncherFrame extends JFrame {
         Instance instance = launcher.getInstances().get(instancesTable.convertRowIndexToModel(instancesTable.getSelectedRow()));
 
         launcher.getLaunchSupervisor().launch(this, instance, permitUpdate, new LaunchListenerImpl(this));
+    }
+
+    private void doUpdate(final Instance selected) {
+        selected.setUpdatePending(true);
+        Instance instance = launcher.getInstances().get(instancesTable.convertRowIndexToModel(instancesTable.getSelectedRow()));
+        launcher.getLaunchSupervisor().update(this, instance, new LaunchListenerImpl(this));
+        instancesModel.update();
     }
 
     private static class LaunchListenerImpl implements LaunchListener {
