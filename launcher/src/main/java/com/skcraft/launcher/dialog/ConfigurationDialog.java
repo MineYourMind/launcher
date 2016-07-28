@@ -33,7 +33,7 @@ public class ConfigurationDialog extends JDialog {
     private final JTextField installLocation = new JTextField();
     private final FormPanel javaSettingsPanel = new FormPanel();
     private final JTextField jvmPathText = new JTextField();
-    private final JTextField jvmArgsText = new JTextField();
+    private final JTextArea jvmArgsText = new JTextArea();
     private final JSpinner minMemorySpinner = new JSpinner();
     private final JSpinner maxMemorySpinner = new JSpinner();
     private final JSpinner permGenSpinner = new JSpinner();
@@ -100,6 +100,9 @@ public class ConfigurationDialog extends JDialog {
         tabbedPane.addTab(SharedLocale.tr("options.generalTab"), SwingHelper.alignTabbedPane(generalSettingsPanel));
 
         javaSettingsPanel.addRow(new JLabel(SharedLocale.tr("options.jvmPath")), jvmPathText);
+        jvmArgsText.setColumns(jvmPathText.getColumns());
+        jvmArgsText.setLineWrap(true);
+        jvmArgsText.setBorder(jvmPathText.getBorder());
         javaSettingsPanel.addRow(new JLabel(SharedLocale.tr("options.jvmArguments")), jvmArgsText);
         javaSettingsPanel.addRow(Box.createVerticalStrut(15));
         javaSettingsPanel.addRow(bitButton);
