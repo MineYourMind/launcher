@@ -24,7 +24,7 @@ public class Configuration {
     private boolean offlineEnabled = false;
     private String installLocation;
     private String jvmPath;
-    private String jvmArgs = "-XX:+UseCMSCompactAtFullCollection -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+AggressiveOpts";
+    private String jvmArgs = "-XX:+UseCMSCompactAtFullCollection\n-XX:+UseConcMarkSweepGC\n-XX:+UseParNewGC\n-XX:+AggressiveOpts";
     private int minMemory = 1024;
     private int maxMemory = 2048;
     private int permGen = 256;

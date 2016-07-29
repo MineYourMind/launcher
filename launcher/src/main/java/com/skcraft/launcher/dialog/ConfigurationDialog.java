@@ -101,9 +101,14 @@ public class ConfigurationDialog extends JDialog {
 
         javaSettingsPanel.addRow(new JLabel(SharedLocale.tr("options.jvmPath")), jvmPathText);
         jvmArgsText.setColumns(jvmPathText.getColumns());
-        jvmArgsText.setLineWrap(true);
+        jvmArgsText.setLineWrap(false);
         jvmArgsText.setBorder(jvmPathText.getBorder());
-        javaSettingsPanel.addRow(new JLabel(SharedLocale.tr("options.jvmArguments")), jvmArgsText);
+        JScrollPane jvmArgsScrollPane = new JScrollPane(jvmArgsText);
+        Dimension dimension = new Dimension(jvmPathText.getWidth(), 150);
+        jvmArgsScrollPane.setMinimumSize(dimension);
+        jvmArgsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        jvmArgsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        javaSettingsPanel.addRow(new JLabel(SharedLocale.tr("options.jvmArguments")), jvmArgsScrollPane);
         javaSettingsPanel.addRow(Box.createVerticalStrut(15));
         javaSettingsPanel.addRow(bitButton);
 
